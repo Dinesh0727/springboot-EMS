@@ -57,5 +57,18 @@ public class Employee {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     
 }
