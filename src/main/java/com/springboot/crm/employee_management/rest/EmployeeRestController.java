@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.crm.employee_management.Entity.Employee;
-import com.springboot.crm.employee_management.dao.EmployeeDao;
+import com.springboot.crm.employee_management.service.EmployeeService;
 
 
 
@@ -15,15 +15,15 @@ import com.springboot.crm.employee_management.dao.EmployeeDao;
 @RequestMapping("/api")
 public class EmployeeRestController {
 
-    private EmployeeDao employeeDao;
+    private EmployeeService employeeService;
     
-    public EmployeeRestController(EmployeeDao theEmployeeDao){
-        this.employeeDao = theEmployeeDao;
+    public EmployeeRestController(EmployeeService employeeService){
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/employees")
     public List<Employee> getAllEmployees() {
-        return employeeDao.findAll();
+        return employeeService.findAll();
     }
     
 }
