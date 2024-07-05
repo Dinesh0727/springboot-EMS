@@ -1,45 +1,27 @@
 package com.luv2code.springboot.cruddemo.security;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class DemoSecurityConfig {
 
-    // The difference between 401 and 403 is 401 is unauthenticated whereas 403 is forbidden
-    // 401 is when there is no authentication or your credentials doesn't match with any of the ones in DB
-    // 403 is that you are logged in as you have valid credentials but you don't have the required permission 
-    // to access the page
-
+    // Add JDBC support for Auth
+    // You just need to run the corresponding script for BCrypt nothing changes
     @Bean
-    InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails john = User.builder()
-                            .username("john")
-                            .password("{noop}password")
-                            .roles("EMPLOYEE")
-                            .build();
-
-        UserDetails zeke = User.builder()
-                            .username("zeke")
-                            .password("{noop}password123")
-                            .roles("EMPLOYEE", "MANAGER")
-                            .build();
-         
-        UserDetails sweety = User.builder()
-                            .username("sweety")
-                            .password("{noop}love")
-                            .roles("EMPLOYEE", "MANAGER", "ADMIN")
-                            .build();
-
-        return new InMemoryUserDetailsManager(john, zeke, sweety);
+    public UserDetailsManager userDetailsManager(DataSource dataSource){
+        return new JdbcUserDetailsManager(dataSource);
     }
+
+    
 
     @Bean 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
