@@ -18,7 +18,20 @@ public class DemoSecurityConfig {
     // You just need to run the corresponding script for BCrypt nothing changes
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource){
-        return new JdbcUserDetailsManager(dataSource);
+        // Whenever you have a particular problem which you ar not able to see in the logs without
+        // any additional properties setup, extend the logging information to debug in the security tab
+        // 
+
+
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+            "Select user_id, pw, active from members where user_id=?");
+
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+            "select user_id, role from roles where user_id=?");
+
+        return jdbcUserDetailsManager;
     }
 
     
